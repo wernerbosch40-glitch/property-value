@@ -209,16 +209,25 @@ document.getElementById("leadForm").addEventListener("submit",async(e)=>{
   };
 
   if(CONFIG.databaseEndpoint){
-    try{
-      await fetch(CONFIG.databaseEndpoint,{
-        method:"POST",
-        mode:"no-cors",
-        headers:{"Content-Type":"text/plain;charset=utf-8"},
-        body:JSON.stringify(payload)
-      });
-    }catch(err){console.warn("Database save failed",err)}
+    const saveUrl = CONFIG.databaseEndpoint + "?" + new URLSearchParams({
+      action: "add",
+      address: payload.address,
+      name: payload.name,
+      phone: payload.phone,
+      preferredContact: payload.preferredContact,
+      source: payload.source,
+      t: String(Date.now())
+    }).toString();
+
+    // A hidden image request is reliable across domains and continues even when WhatsApp opens.
+    const beacon = new Image();
+    beacon.style.display = "none";
+    beacon.src = saveUrl;
+    document.body.appendChild(beacon);
+
+    // Give the request a brief head start before opening WhatsApp.
+    await new Promise(resolve => setTimeout(resolve, 900));
   } else {
-    // Local backup for testing before the database endpoint is connected.
     const leads=JSON.parse(localStorage.getItem("propertyValueLeads")||"[]");
     leads.push(payload);
     localStorage.setItem("propertyValueLeads",JSON.stringify(leads));
