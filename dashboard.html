@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Werner Bosch Property Platform</title>
+<title>Werner & Liesl Property Platform</title>
 <style>
 :root{--navy:#062a61;--navy2:#0b3c80;--red:#d71920;--bg:#f2f5fa;--muted:#657186;--green:#168342}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#10213a}
@@ -20,17 +20,17 @@ button{border:0;border-radius:10px;padding:13px 16px;font-weight:900;cursor:poin
 </head>
 <body>
 <div class="app">
-<aside class="side"><div class="logo">WERNER BOSCH<span>PROPERTY PLATFORM</span></div><div class="nav"><div>Dashboard</div></div></aside>
+<aside class="side"><div class="logo">WERNER &amp; LIESL<span>PROPERTY PLATFORM</span></div><div class="nav"><div>Dashboard</div></div></aside>
 <main>
 <section id="loginView" class="login">
-<h2>Secure dashboard login</h2><p>Sign in with the email account created in Supabase Authentication.</p>
+<h2>Secure team dashboard login</h2><p>Sign in with an authorised team account created in Supabase Authentication.</p>
 <input id="email" type="email" placeholder="Email">
 <input id="password" type="password" placeholder="Password">
 <button class="primary" id="loginBtn">SIGN IN</button>
 <div id="loginMessage"></div>
 </section>
 <section id="dashboardView" class="hidden">
-<div class="top"><div><h1>Good day, Werner</h1><p>New valuation leads should never be more than one click away.</p></div><button class="logout" id="logoutBtn">Sign out</button></div>
+<div class="top"><div><h1>Property Team Dashboard</h1><p>Shared valuation leads for Werner and Liesl.</p></div><button class="logout" id="logoutBtn">Sign out</button></div>
 <div class="stats"><div class="stat">New leads<b id="newCount">0</b></div><div class="stat">Follow-ups<b id="followCount">0</b></div><div class="stat">Valuations booked<b id="bookedCount">0</b></div><div class="stat">Total leads<b id="totalCount">0</b></div></div>
 <div class="panel"><h2>Valuation requests</h2><div id="leadList">Loading leads...</div></div>
 </section>
