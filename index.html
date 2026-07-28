@@ -1,253 +1,148 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>What's My Property Worth? | RE/MAX First Bloemfontein</title>
-<meta name="description" content="Request a free, no-obligation professional property valuation from Werner Bosch and Liesl Badenhorst at RE/MAX First Bloemfontein.">
-<meta property="og:title" content="What's My Property Worth?">
-<meta property="og:description" content="Start your free professional property valuation.">
-<style>
-:root {
-  --navy:#062a61;
-  --navy2:#0b3c80;
-  --red:#d71920;
-  --white:#fff;
-  --ink:#11213a;
-  --muted:#657186;
-  --card:rgba(255,255,255,.96);
-}
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#07152a}
-body{overflow-x:hidden}
-button,input{font:inherit}
-.shell{min-height:100vh;position:relative}
-.screen{display:none;min-height:100vh;position:relative;isolation:isolate}
-.screen.active{display:grid;animation:fade .28s ease}
-@keyframes fade{from{opacity:.35}to{opacity:1}}
-.bg{position:absolute;inset:0;z-index:-3;background-size:cover;background-position:center}
-.bg.city{background-image:url("assets/city.jpg")}
-.bg.house{background-image:url("assets/house.png")}
-.overlay{position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(2,16,39,.88) 0%,rgba(2,20,48,.72) 48%,rgba(2,20,48,.30) 100%)}
-.overlay.house{background:linear-gradient(90deg,rgba(2,16,39,.90) 0%,rgba(2,20,48,.72) 52%,rgba(2,20,48,.38) 100%)}
-.glow{position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 85% 12%,rgba(255,255,255,.25),transparent 30%)}
-.topbar{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:22px clamp(20px,4vw,60px);z-index:5}
-.topbar img{width:min(300px,55vw);max-height:76px;object-fit:contain;object-position:left center;filter:drop-shadow(0 4px 18px rgba(0,0,0,.2))}
-.local{color:#fff;font-weight:700;font-size:14px;letter-spacing:.03em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
-.grid{width:min(1240px,100%);margin:auto;padding:120px clamp(20px,5vw,70px) 40px;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);gap:52px;align-items:center}
-.hero{color:#fff}
-.badge{display:inline-flex;gap:9px;align-items:center;padding:9px 13px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.10);backdrop-filter:blur(8px);border-radius:999px;font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase}
-h1{font-size:clamp(48px,7vw,92px);line-height:.95;letter-spacing:-.055em;margin:22px 0 20px;text-shadow:0 4px 24px rgba(0,0,0,.25)}
-h1 span{display:block;color:#ff3340}
-.hero p{font-size:clamp(18px,2.2vw,27px);line-height:1.4;max-width:710px;margin:0 0 26px}
-.proofs{display:flex;gap:12px;flex-wrap:wrap}
-.proofs span{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:13px;font-weight:700}
-.card{background:var(--card);border:1px solid rgba(255,255,255,.75);border-radius:26px;padding:34px;box-shadow:0 30px 90px rgba(0,0,0,.35);backdrop-filter:blur(12px)}
-.step-label{color:var(--red);font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.card h2{font-size:34px;line-height:1.1;color:var(--navy);margin:10px 0 10px}
-.card p{color:var(--muted);line-height:1.5;margin:0 0 24px}
-label{display:block;font-weight:800;font-size:14px;margin:16px 0 8px}
-input{width:100%;border:1.5px solid #c8d0dc;border-radius:13px;padding:16px 15px;font-size:17px;outline:none;background:#fff}
-input:focus{border-color:var(--navy2);box-shadow:0 0 0 4px rgba(11,60,128,.10)}
-.cta{width:100%;border:0;border-radius:13px;padding:17px 18px;background:linear-gradient(135deg,var(--red),#a70e14);color:#fff;font-weight:900;font-size:17px;cursor:pointer;margin-top:21px;box-shadow:0 12px 30px rgba(215,25,32,.28)}
-.cta:hover{transform:translateY(-1px)}
-.secondary{width:100%;border:1px solid #cbd3df;border-radius:13px;padding:14px 18px;background:#fff;color:var(--navy);font-weight:800;cursor:pointer;margin-top:10px}
-.privacy{font-size:12px!important;color:#707a8a!important;margin-top:16px!important}
-.progress{display:flex;gap:7px;margin-bottom:24px}
-.progress i{height:6px;flex:1;border-radius:99px;background:#dfe5ef}
-.progress i.on{background:var(--red)}
-.contact-choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-.choice{border:1.5px solid #c8d0dc;border-radius:13px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;background:#fff;font-weight:700}
-.choice input{width:auto}
-.agents{display:flex;align-items:end;justify-content:center;gap:14px;margin-top:26px}
-.agents img{width:46%;max-height:300px;object-fit:cover;object-position:top;border-radius:22px 22px 0 0;box-shadow:0 14px 38px rgba(0,0,0,.22)}
-.names{display:flex;justify-content:space-between;gap:20px;color:#fff;margin-top:10px;font-size:13px;font-weight:700}
-.success{text-align:center}
-.tick{width:76px;height:76px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#e6f8ec;color:#168342;font-size:38px;font-weight:900}
-.success h2{font-size:36px}
-.whatsapp{background:#17864d}
-.note{font-size:12px;color:#6d7788;margin-top:12px;line-height:1.45}
-@media(max-width:900px){
-  .grid{grid-template-columns:1fr;padding-top:110px;gap:26px}
-  .topbar{padding:16px 18px}
-  .local{display:none}
-  .hero{text-align:left}
-  h1{font-size:54px}
-  .card{padding:26px 20px;border-radius:20px}
-  .agents{display:none}
-}
-@media(max-width:520px){
-  .grid{padding-left:14px;padding-right:14px}
-  h1{font-size:45px}
-  .hero p{font-size:18px}
-  .proofs span{font-size:11px;padding:8px 10px}
-  .contact-choice{grid-template-columns:1fr}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>What's My Property Worth? | Werner Bosch</title>
+  <meta name="description" content="Request a free, no-obligation professional property valuation in Bloemfontein.">
+  <meta property="og:title" content="What's My Property Worth?">
+  <meta property="og:description" content="Start your free professional property valuation.">
+  <meta property="og:image" content="assets/house.png">
+  <style>
+    :root{--navy:#062a61;--navy2:#0b3c80;--red:#d71920;--ink:#11213a;--muted:#657186;--green:#17864d}
+    *{box-sizing:border-box} html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+    body{background:#07152a}.shell{min-height:100vh;position:relative;isolation:isolate}
+    .bg{position:absolute;inset:0;z-index:-3;background:url("assets/house.png") center/cover no-repeat}
+    .overlay{position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(2,16,39,.93),rgba(2,20,48,.75) 52%,rgba(2,20,48,.34))}
+    .glow{position:absolute;inset:0;z-index:-1;background:radial-gradient(circle at 85% 12%,rgba(255,255,255,.22),transparent 30%)}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px clamp(18px,4vw,58px)}
+    .topbar img{width:min(280px,55vw);max-height:72px;object-fit:contain;object-position:left}.local{color:white;font-weight:700}
+    .grid{width:min(1240px,100%);margin:auto;padding:45px clamp(18px,5vw,70px) 48px;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(350px,.88fr);gap:52px;align-items:center}
+    .hero{color:#fff}.badge{display:inline-flex;padding:9px 13px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.1);border-radius:999px;font-size:13px;font-weight:800;text-transform:uppercase}
+    h1{font-size:clamp(48px,7vw,88px);line-height:.96;letter-spacing:-.055em;margin:22px 0 20px;text-shadow:0 4px 24px rgba(0,0,0,.25)}
+    h1 span{display:block;color:#ff3340}.hero p{font-size:clamp(18px,2vw,25px);line-height:1.45;max-width:700px}
+    .proofs{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.proofs span{padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);font-size:13px;font-weight:700}
+    .card{background:rgba(255,255,255,.97);border-radius:26px;padding:34px;box-shadow:0 30px 90px rgba(0,0,0,.38)}
+    .eyebrow{color:var(--red);font-weight:900;font-size:12px;letter-spacing:.12em;text-transform:uppercase}.card h2{font-size:34px;line-height:1.1;color:var(--navy);margin:10px 0}
+    .card>p{color:var(--muted);line-height:1.5;margin:0 0 20px}label{display:block;font-weight:800;font-size:14px;margin:15px 0 7px}
+    input{width:100%;border:1.5px solid #c8d0dc;border-radius:13px;padding:15px;font-size:17px;outline:none}input:focus{border-color:var(--navy2);box-shadow:0 0 0 4px rgba(11,60,128,.1)}
+    .contact{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{display:flex;align-items:center;gap:8px;border:1.5px solid #c8d0dc;border-radius:13px;padding:14px;background:#fff;font-weight:700;cursor:pointer}.choice input{width:auto}
+    button{width:100%;border:0;border-radius:13px;padding:17px 18px;background:linear-gradient(135deg,var(--red),#a70e14);color:#fff;font-weight:900;font-size:17px;cursor:pointer;margin-top:20px}
+    button:disabled{opacity:.6;cursor:wait}.privacy,.status{font-size:12px;color:#6d7788;margin-top:13px;line-height:1.45}.status{display:none;padding:12px;border-radius:10px}.status.error{display:block;background:#fff0f0;color:#9d1117}.status.ok{display:block;background:#eaf8ef;color:#176a39}
+    .success{display:none;text-align:center}.success.show{display:block}.form.hide{display:none}.tick{width:76px;height:76px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;background:#e6f8ec;color:#168342;font-size:38px;font-weight:900}
+    .success a{display:block;text-decoration:none;background:var(--green);color:#fff;padding:16px;border-radius:13px;font-weight:900;margin-top:18px}
+    @media(max-width:900px){.grid{grid-template-columns:1fr;gap:26px;padding-top:20px}.local{display:none}.card{padding:26px 20px}.topbar{padding:16px 18px}}
+    @media(max-width:520px){h1{font-size:52px}.contact{grid-template-columns:1fr}.grid{padding-left:14px;padding-right:14px}.card h2{font-size:29px}}
+  </style>
 </head>
 <body>
 <div class="shell">
-
-  <section id="screen1" class="screen active">
-    <div class="bg city"></div><div class="overlay"></div><div class="glow"></div>
-    <div class="topbar">
-      <img src="assets/remax.png" alt="RE/MAX First Bloemfontein">
-      <div class="local">Bloemfontein Property Specialists</div>
-    </div>
-    <div class="grid">
-      <div class="hero">
-        <div class="badge">Free professional property valuation</div>
-        <h1>What's My <span>Property Worth?</span></h1>
-        <p>Discover what your property could be worth in today's Bloemfontein market.</p>
-        <div class="proofs"><span>✓ No obligation</span><span>✓ Completely confidential</span><span>✓ Local market expertise</span></div>
+  <div class="bg"></div><div class="overlay"></div><div class="glow"></div>
+  <header class="topbar">
+    <img src="assets/remax.png" alt="RE/MAX">
+    <div class="local">Bloemfontein Property Valuations</div>
+  </header>
+  <main class="grid">
+    <section class="hero">
+      <div class="badge">Free • Professional • No obligation</div>
+      <h1>What is your <span>property worth?</span></h1>
+      <p>Get a professional property valuation and clear market guidance from Werner Bosch at RE/MAX First Bloemfontein.</p>
+      <div class="proofs"><span>Local market knowledge</span><span>Confidential</span><span>Personal service</span></div>
+    </section>
+    <section class="card">
+      <div class="form" id="leadFormWrap">
+        <div class="eyebrow">Request your valuation</div>
+        <h2>Tell me about your property</h2>
+        <p>Complete the details below and I will contact you personally.</p>
+        <form id="leadForm">
+          <label for="address">Property address</label>
+          <input id="address" name="address" autocomplete="street-address" required placeholder="e.g. 25 Main Road, Langenhovenpark">
+          <label for="name">Your name</label>
+          <input id="name" name="name" autocomplete="name" required placeholder="Your full name">
+          <label for="phone">Mobile number</label>
+          <input id="phone" name="phone" inputmode="tel" autocomplete="tel" required placeholder="082 123 4567">
+          <label>How should I contact you?</label>
+          <div class="contact">
+            <label class="choice"><input type="radio" name="preferred" value="WhatsApp" checked> WhatsApp</label>
+            <label class="choice"><input type="radio" name="preferred" value="Phone call"> Phone call</label>
+          </div>
+          <button id="submitBtn" type="submit">REQUEST MY VALUATION</button>
+          <div id="status" class="status" role="alert"></div>
+          <p class="privacy">Your details are kept private and are used only to respond to your valuation request.</p>
+        </form>
       </div>
-      <div class="card">
-        <div class="progress"><i class="on"></i><i></i></div>
-        <div class="step-label">Step 1 of 2</div>
-        <h2>Where is your property?</h2>
-        <p>Enter the full address so we can prepare accurately before contacting you.</p>
-        <label for="address">Property address</label>
-        <input id="address" autocomplete="street-address" placeholder="e.g. 14 Kenneth Kaunda Road, Bloemfontein">
-        <button id="startBtn" class="cta">DISCOVER MY PROPERTY VALUE →</button>
-        <p class="privacy">🔒 Your information is private and will only be used for your valuation request.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="screen2" class="screen">
-    <div class="bg house"></div><div class="overlay house"></div><div class="glow"></div>
-    <div class="topbar">
-      <img src="assets/remax.png" alt="RE/MAX First Bloemfontein">
-      <div class="local">Werner Bosch & Liesl Badenhorst</div>
-    </div>
-    <div class="grid">
-      <div class="hero">
-        <div class="badge">Almost done</div>
-        <h1>Your free <span>valuation request</span></h1>
-        <p>Add your contact details and choose how you would prefer us to contact you.</p>
-        <div class="agents">
-          <img src="assets/werner.jpg" alt="Werner Bosch">
-          <img src="assets/liesl.jpg" alt="Liesl Badenhorst">
-        </div>
-        <div class="names"><span>Werner · 082 397 1778</span><span>Liesl · 083 656 2533</span></div>
-      </div>
-      <form id="leadForm" class="card">
-        <div class="progress"><i class="on"></i><i class="on"></i></div>
-        <div class="step-label">Step 2 of 2</div>
-        <h2>How may we contact you?</h2>
-        <p>We will use these details only to assist with your property valuation.</p>
-        <label for="name">Your name</label>
-        <input id="name" autocomplete="name" placeholder="Your full name">
-        <label for="phone">Cellphone number</label>
-        <input id="phone" autocomplete="tel" inputmode="tel" placeholder="e.g. 082 123 4567">
-        <label>Preferred contact method</label>
-        <div class="contact-choice">
-          <label class="choice"><input type="radio" name="contact" value="WhatsApp" checked> WhatsApp</label>
-          <label class="choice"><input type="radio" name="contact" value="Phone call"> Phone call</label>
-        </div>
-        <button class="cta" type="submit">REQUEST MY FREE VALUATION</button>
-        <button id="backBtn" class="secondary" type="button">Back</button>
-        <p class="privacy">By continuing, you agree that Werner or Liesl may contact you about this request.</p>
-      </form>
-    </div>
-  </section>
-
-  <section id="screen3" class="screen">
-    <div class="bg city"></div><div class="overlay"></div><div class="glow"></div>
-    <div class="topbar"><img src="assets/remax.png" alt="RE/MAX First Bloemfontein"></div>
-    <div class="grid">
-      <div class="hero">
-        <h1>Thank <span>you.</span></h1>
-        <p>Your valuation request has been prepared.</p>
-      </div>
-      <div class="card success">
+      <div class="success" id="success">
         <div class="tick">✓</div>
-        <h2>Your details have been saved</h2>
-        <p>WhatsApp will open with your request already completed. Simply tap <strong>Send</strong>.</p>
-        <button id="waBtn" class="cta whatsapp">OPEN WHATSAPP</button>
-        <p class="note">Werner Bosch · 082 397 1778<br>Liesl Badenhorst · 083 656 2533</p>
+        <h2>Request received</h2>
+        <p>Thank you. Werner will contact you personally regarding your property valuation.</p>
+        <a id="waLink" href="#" target="_blank" rel="noopener">Continue on WhatsApp</a>
       </div>
-    </div>
-  </section>
-
+    </section>
+  </main>
 </div>
+<script src="config.js"></script>
 <script>
-const CONFIG = {
-  // After deploying Code.gs as a Google Apps Script Web App,
-  // paste its /exec URL between the quotes below.
-  databaseEndpoint: "https://script.google.com/macros/s/AKfycbwoj6sM3s_1cbW1bhr0ZE-5e2skFUcs8bdCt82SwBflR0mBn1a0kSPdM3xeiMc6fSCacQ/exec",
-  whatsappNumber: "27823971778"
-};
+const cfg = window.APP_CONFIG;
+const form = document.getElementById('leadForm');
+const statusBox = document.getElementById('status');
+const submitBtn = document.getElementById('submitBtn');
 
-const s1=document.getElementById("screen1"),s2=document.getElementById("screen2"),s3=document.getElementById("screen3");
-const address=document.getElementById("address"),nameInput=document.getElementById("name"),phone=document.getElementById("phone");
-let whatsappUrl="#";
-
-function show(screen){[s1,s2,s3].forEach(x=>x.classList.remove("active"));screen.classList.add("active");window.scrollTo(0,0)}
-function required(el){if(!el.value.trim()){el.focus();el.style.borderColor="#d71920";return false}el.style.borderColor="";return true}
-
-document.getElementById("startBtn").onclick=()=>{if(required(address))show(s2)};
-document.getElementById("backBtn").onclick=()=>show(s1);
-
-document.getElementById("leadForm").addEventListener("submit",async(e)=>{
-  e.preventDefault();
-  if(!required(nameInput)||!required(phone))return;
-  const preferred=document.querySelector('input[name="contact"]:checked').value;
-  const payload={
-    timestamp:new Date().toISOString(),
-    address:address.value.trim(),
-    name:nameInput.value.trim(),
-    phone:(() => {
-      const raw = phone.value.trim();
-      const digits = raw.replace(/\D/g, "");
-      if (digits.length === 9 && digits.startsWith("8")) return "0" + digits;
-      if (digits.length === 11 && digits.startsWith("27")) return "0" + digits.slice(2);
-      return digits || raw;
-    })(),
-    preferredContact:preferred,
-    source:"Property Value Platform"
-  };
-
-  if(CONFIG.databaseEndpoint){
-    const saveUrl = CONFIG.databaseEndpoint + "?" + new URLSearchParams({
-      action: "add",
-      address: payload.address,
-      name: payload.name,
-      phone: payload.phone,
-      preferredContact: payload.preferredContact,
-      source: payload.source,
-      t: String(Date.now())
-    }).toString();
-
-    // A hidden image request is reliable across domains and continues even when WhatsApp opens.
-    const beacon = new Image();
-    beacon.style.display = "none";
-    beacon.src = saveUrl;
-    document.body.appendChild(beacon);
-
-    // Give the request a brief head start before opening WhatsApp.
-    await new Promise(resolve => setTimeout(resolve, 900));
-  } else {
-    const leads=JSON.parse(localStorage.getItem("propertyValueLeads")||"[]");
-    leads.push(payload);
-    localStorage.setItem("propertyValueLeads",JSON.stringify(leads));
+function normalisePhone(value){
+  let p = String(value || '').replace(/\D/g,'');
+  if(p.length === 9 && p.startsWith('8')) p = '0' + p;
+  if(p.length === 11 && p.startsWith('27')) p = '0' + p.slice(2);
+  return p;
+}
+function showStatus(message,type){
+  statusBox.textContent = message;
+  statusBox.className = 'status ' + type;
+}
+form.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  showStatus('', '');
+  const property_address = document.getElementById('address').value.trim();
+  const client_name = document.getElementById('name').value.trim();
+  const mobile_number = normalisePhone(document.getElementById('phone').value);
+  const preferred_contact = document.querySelector('input[name="preferred"]:checked').value;
+  if(!property_address || !client_name || mobile_number.length < 10){
+    showStatus('Please complete all fields and enter a valid mobile number.','error');
+    return;
   }
-
-  const message=[
-    "Hi Werner, I would like a FREE professional property valuation.",
-    "",
-    "Property address: "+payload.address,
-    "Name: "+payload.name,
-    "Cell number: "+payload.phone,
-    "Preferred contact: "+payload.preferredContact
-  ].join("\n");
-
-  whatsappUrl="https://wa.me/"+CONFIG.whatsappNumber+"?text="+encodeURIComponent(message);
-  show(s3);
-  setTimeout(()=>{window.location.href=whatsappUrl},650);
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'SAVING YOUR REQUEST...';
+  try{
+    const response = await fetch(`${cfg.SUPABASE_URL}/rest/v1/${cfg.LEADS_TABLE}`, {
+      method:'POST',
+      headers:{
+        'apikey': cfg.SUPABASE_PUBLISHABLE_KEY,
+        'Authorization': `Bearer ${cfg.SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type':'application/json',
+        'Prefer':'return=minimal'
+      },
+      body: JSON.stringify({
+        property_address,
+        client_name,
+        mobile_number,
+        preferred_contact,
+        status:'New Lead',
+        source:'Website Landing Page'
+      })
+    });
+    if(!response.ok){
+      const details = await response.text();
+      throw new Error(details || `Request failed (${response.status})`);
+    }
+    document.getElementById('leadFormWrap').classList.add('hide');
+    document.getElementById('success').classList.add('show');
+    const message = `Hi Werner, I have requested a property valuation for ${property_address}. My name is ${client_name}.`;
+    document.getElementById('waLink').href = `https://wa.me/${cfg.WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  }catch(error){
+    console.error(error);
+    showStatus('Your request could not be saved. Please try again or contact Werner directly on 082 397 1778.','error');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'REQUEST MY VALUATION';
+  }
 });
-
-document.getElementById("waBtn").onclick=()=>{window.location.href=whatsappUrl};
 </script>
 </body>
 </html>

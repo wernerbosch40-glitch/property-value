@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Werner Bosch Property Platform</title>
+<style>
+:root{--navy:#062a61;--navy2:#0b3c80;--red:#d71920;--bg:#f2f5fa;--muted:#657186;--green:#168342}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#10213a}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.side{background:linear-gradient(180deg,#061f48,#0b3c80);color:white;padding:28px 22px}.logo{font-size:26px;font-weight:900}.logo span{display:block;color:#ff3340}.nav{margin-top:34px}.nav div{padding:14px;border-radius:10px;font-weight:800;background:rgba(255,255,255,.12)}
+main{padding:34px}.top{display:flex;justify-content:space-between;align-items:center}.top h1{font-size:34px;margin:0;color:var(--navy)}
+.login,.panel{background:#fff;border:1px solid #dfe5ef;border-radius:22px;padding:26px;box-shadow:0 14px 38px rgba(16,33,58,.08)}
+.login{max-width:480px;margin:90px auto}.login input{width:100%;padding:14px;margin-top:10px;border:1px solid #ccd4e0;border-radius:10px;font-size:16px}
+button{border:0;border-radius:10px;padding:13px 16px;font-weight:900;cursor:pointer}.primary{background:var(--navy);color:#fff;width:100%;margin-top:16px}.logout{background:#fff;color:var(--navy);border:1px solid #ccd4e0}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}.stat{background:#fff;border-radius:18px;padding:20px;border:1px solid #dfe5ef}.stat b{font-size:34px;color:var(--navy);display:block;margin-top:8px}
+.lead{display:grid;grid-template-columns:1.1fr 1.4fr .8fr .8fr auto;gap:14px;align-items:center;padding:17px 0;border-bottom:1px solid #e4e9f0}.lead:last-child{border-bottom:0}.small{font-size:12px;color:var(--muted)}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.actions a,.actions button{padding:10px 11px;border-radius:9px;text-decoration:none;font-weight:800;font-size:12px}.call{background:#18894e;color:#fff}.wa{background:#18a957;color:#fff}.map{background:#eaf0f8;color:var(--navy)}.outcome{background:var(--navy);color:#fff}
+.hidden{display:none}.message{padding:14px;border-radius:10px;margin-top:14px;background:#fff0f0;color:#9d1117}.status-pill{background:#e8f7ed;color:#176a39;padding:8px 10px;border-radius:999px;font-weight:800;font-size:12px}
+@media(max-width:950px){.app{grid-template-columns:1fr}.side{display:none}.stats{grid-template-columns:1fr 1fr}.lead{grid-template-columns:1fr}.actions{margin-top:6px}main{padding:18px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="side"><div class="logo">WERNER BOSCH<span>PROPERTY PLATFORM</span></div><div class="nav"><div>Dashboard</div></div></aside>
+<main>
+<section id="loginView" class="login">
+<h2>Secure dashboard login</h2><p>Sign in with the email account created in Supabase Authentication.</p>
+<input id="email" type="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button class="primary" id="loginBtn">SIGN IN</button>
+<div id="loginMessage"></div>
+</section>
+<section id="dashboardView" class="hidden">
+<div class="top"><div><h1>Good day, Werner</h1><p>New valuation leads should never be more than one click away.</p></div><button class="logout" id="logoutBtn">Sign out</button></div>
+<div class="stats"><div class="stat">New leads<b id="newCount">0</b></div><div class="stat">Follow-ups<b id="followCount">0</b></div><div class="stat">Valuations booked<b id="bookedCount">0</b></div><div class="stat">Total leads<b id="totalCount">0</b></div></div>
+<div class="panel"><h2>Valuation requests</h2><div id="leadList">Loading leads...</div></div>
+</section>
+</main></div>
+<script src="config.js"></script>
+<script>
+const cfg=window.APP_CONFIG;
+let accessToken=null;
+const loginView=document.getElementById('loginView'), dashboardView=document.getElementById('dashboardView');
+function digits(v){let p=String(v||'').replace(/\D/g,'');if(p.length===9&&p.startsWith('8'))p='0'+p;if(p.length===11&&p.startsWith('27'))p='0'+p.slice(2);return p}
+function displayPhone(v){const p=digits(v);return p.length===10?`${p.slice(0,3)} ${p.slice(3,6)} ${p.slice(6)}`:p}
+async function api(path,options={}){
+ const headers={'apikey':cfg.SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json',...(options.headers||{})};
+ if(accessToken) headers.Authorization=`Bearer ${accessToken}`;
+ const r=await fetch(`${cfg.SUPABASE_URL}${path}`,{...options,headers});
+ if(!r.ok) throw new Error(await r.text());
+ return r.status===204?null:r.json();
+}
+async function signIn(){
+ const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
+ const box=document.getElementById('loginMessage');box.innerHTML='';
+ try{
+  const data=await api('/auth/v1/token?grant_type=password',{method:'POST',body:JSON.stringify({email,password})});
+  accessToken=data.access_token;sessionStorage.setItem('wb_access_token',accessToken);
+  loginView.classList.add('hidden');dashboardView.classList.remove('hidden');await loadLeads();
+ }catch(e){box.className='message';box.textContent='Login failed. Check your email and password.'}
+}
+async function loadLeads(){
+ const list=document.getElementById('leadList');
+ try{
+  const leads=await api(`/rest/v1/${cfg.LEADS_TABLE}?select=*&order=created_at.desc`);
+  document.getElementById('totalCount').textContent=leads.length;
+  document.getElementById('newCount').textContent=leads.filter(x=>(x.status||'New Lead')==='New Lead').length;
+  document.getElementById('followCount').textContent=leads.filter(x=>x.follow_up_date).length;
+  document.getElementById('bookedCount').textContent=leads.filter(x=>String(x.status||'').includes('Booked')).length;
+  if(!leads.length){list.innerHTML='<p>No leads yet.</p>';return}
+  list.innerHTML=leads.map(l=>{
+   const p=digits(l.mobile_number),wa=p.startsWith('0')?'27'+p.slice(1):p;
+   const map=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(l.property_address||'')}`;
+   return `<div class="lead"><div><b>${esc(l.client_name||'Unnamed')}</b><div class="small">${new Date(l.created_at).toLocaleString()}</div></div><div><b>${esc(l.property_address||'No address')}</b><div class="small">${esc(l.preferred_contact||'')}</div></div><div>${displayPhone(p)}</div><div><span class="status-pill">${esc(l.status||'New Lead')}</span></div><div class="actions"><a class="call" href="tel:${p}">CALL</a><a class="wa" target="_blank" href="https://wa.me/${wa}">WHATSAPP</a><a class="map" target="_blank" href="${map}">MAP</a><button class="outcome" onclick="updateStatus(${l.id})">OUTCOME</button></div></div>`
+  }).join('');
+ }catch(e){list.innerHTML='<div class="message">Could not load leads. Complete the dashboard security setup in SETUP.md.</div>'}
+}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+async function updateStatus(id){
+ const value=prompt('Enter outcome: Contacted, Valuation Booked, Call Back Later, or No Answer');
+ if(!value)return;
+ try{await api(`/rest/v1/${cfg.LEADS_TABLE}?id=eq.${id}`,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:value})});await loadLeads()}catch(e){alert('Could not update the lead.')}
+}
+document.getElementById('loginBtn').onclick=signIn;
+document.getElementById('logoutBtn').onclick=()=>{sessionStorage.removeItem('wb_access_token');location.reload()};
+accessToken=sessionStorage.getItem('wb_access_token');
+if(accessToken){loginView.classList.add('hidden');dashboardView.classList.remove('hidden');loadLeads()}
+</script>
+</body></html>
