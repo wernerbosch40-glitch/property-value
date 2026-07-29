@@ -202,6 +202,38 @@ form.addEventListener('submit', async (event) => {
       const details = await response.text();
       throw new Error(details || `Request failed (${response.status})`);
     }
+    try {
+  const emailResponse = await fetch(
+    `${cfg.SUPABASE_URL}/functions/v1/send-lead-email`,
+    {
+      method: 'POST',
+      headers: {
+        'apikey': cfg.SUPABASE_PUBLISHABLE_KEY,
+        'Authorization': `Bearer ${cfg.SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: client_name,
+        phone: mobile_number,
+        suburb: property_address,
+        reason: 'Property valuation request',
+        message: `Preferred contact method: ${preferred_contact}`
+      })
+    }
+  );
+
+  if (!emailResponse.ok) {
+    console.error(
+      'Lead saved, but email notification failed:',
+      await emailResponse.text()
+    );
+  }
+} catch (emailError) {
+  console.error(
+    'Lead saved, but email notification could not be sent:',
+    emailError
+  );
+}
     document.getElementById('leadFormWrap').classList.add('hide');
     document.getElementById('success').classList.add('show');
     const message = `Hi Werner and Liesl, I have requested a property valuation for ${property_address}. My name is ${client_name}.`;
