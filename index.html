@@ -283,6 +283,64 @@
       color:var(--muted);
       font-size:12px;
     }
+
+    .success-card{
+      display:none;
+      min-height:500px;
+      padding:34px 22px;
+      text-align:center;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+    }
+    .success-card.show{display:flex}
+    .success-check{
+      width:84px;
+      height:84px;
+      display:grid;
+      place-items:center;
+      margin:0 auto 20px;
+      border-radius:50%;
+      background:#e7f7ed;
+      color:#178347;
+      font-size:50px;
+      font-weight:900;
+      line-height:1;
+    }
+    .success-card h2{
+      margin:0 0 12px;
+      color:var(--navy);
+      font-size:36px;
+    }
+    .success-card p{
+      max-width:390px;
+      margin:0 auto 24px;
+      color:var(--ink);
+      font-size:17px;
+      line-height:1.45;
+    }
+    .success-whatsapp{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:15px 18px;
+      border-radius:11px;
+      background:#1a9853;
+      color:#fff;
+      font-size:17px;
+      font-weight:900;
+    }
+    .success-whatsapp:hover{background:#147d43}
+    .success-reset{
+      margin-top:14px;
+      border:0;
+      background:transparent;
+      color:var(--navy2);
+      font-weight:800;
+      cursor:pointer;
+    }
+
     .message{
       display:none;
       margin-top:13px;
@@ -632,31 +690,41 @@
         </div>
 
         <div class="form-card" id="valuation-form">
-          <h2>Get Your FREE Property Valuation</h2>
-          <div class="quick">🟢 Complete your FREE valuation request in about <strong>1 minute</strong>.</div>
-          <p class="form-sub">Werner or Liesl will personally contact you to prepare your professional property valuation.</p>
+          <div id="formContent">
+            <h2>Get Your FREE Property Valuation</h2>
+            <div class="quick">🟢 Complete your FREE valuation request in about <strong>1 minute</strong>.</div>
+            <p class="form-sub">Werner or Liesl will personally contact you to prepare your professional property valuation.</p>
 
-          <form id="leadForm">
-            <label for="address">Property address</label>
-            <input id="address" name="property_address" autocomplete="street-address" placeholder="e.g. 14 Kenneth Kaunda Road, Bloemfontein" required>
+            <form id="leadForm">
+              <label for="address">Property address</label>
+              <input id="address" name="property_address" autocomplete="street-address" placeholder="e.g. 14 Kenneth Kaunda Road, Bloemfontein" required>
 
-            <label for="name">Your full name</label>
-            <input id="name" name="client_name" autocomplete="name" placeholder="Your name and surname" required>
+              <label for="name">Your full name</label>
+              <input id="name" name="client_name" autocomplete="name" placeholder="Your name and surname" required>
 
-            <label for="phone">Mobile number</label>
-            <input id="phone" name="mobile_number" autocomplete="tel" inputmode="tel" placeholder="082 123 4567" required>
+              <label for="phone">Mobile number</label>
+              <input id="phone" name="mobile_number" autocomplete="tel" inputmode="tel" placeholder="082 123 4567" required>
 
-            <label for="contact">How should we contact you?</label>
-            <select id="contact" name="preferred_contact">
-              <option value="WhatsApp">WhatsApp</option>
-              <option value="Phone call">Phone call</option>
-              <option value="Email">Email</option>
-            </select>
+              <label for="contact">How should we contact you?</label>
+              <select id="contact" name="preferred_contact">
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="Phone call">Phone call</option>
+                <option value="Email">Email</option>
+              </select>
 
-            <button class="submit" id="submitBtn" type="submit">GET MY FREE PROPERTY VALUATION</button>
-            <p class="privacy">🔒 Completely confidential. No spam. No obligation. No pressure.</p>
-            <div class="message" id="formMessage" aria-live="polite"></div>
-          </form>
+              <button class="submit" id="submitBtn" type="submit">GET MY FREE PROPERTY VALUATION</button>
+              <p class="privacy">🔒 Completely confidential. No spam. No obligation. No pressure.</p>
+              <div class="message" id="formMessage" aria-live="polite"></div>
+            </form>
+          </div>
+
+          <div class="success-card" id="successCard" aria-live="polite">
+            <div class="success-check">✓</div>
+            <h2>Request received</h2>
+            <p>Thank you. Werner or Liesl will contact you personally regarding your property valuation.</p>
+            <a class="success-whatsapp" href="https://wa.me/27823971778" target="_blank" rel="noopener">Continue on WhatsApp</a>
+            <button class="success-reset" id="submitAnother" type="button">Submit another request</button>
+          </div>
         </div>
       </div>
     </section>
@@ -802,10 +870,21 @@
     const form = document.getElementById("leadForm");
     const submitButton = document.getElementById("submitBtn");
     const formMessage = document.getElementById("formMessage");
+    const formContent = document.getElementById("formContent");
+    const successCard = document.getElementById("successCard");
+    const submitAnother = document.getElementById("submitAnother");
 
     function cleanPhone(value){
       return value.replace(/\s+/g,"").trim();
     }
+
+    submitAnother.addEventListener("click", () => {
+      successCard.classList.remove("show");
+      formContent.style.display = "block";
+      formMessage.className = "message";
+      formMessage.textContent = "";
+      document.getElementById("address").focus();
+    });
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -829,8 +908,9 @@
           method:"POST",
           headers:{
             apikey:SUPABASE_KEY,
+            Authorization:`Bearer ${SUPABASE_KEY}`,
             "Content-Type":"application/json",
-          Prefer:"return=minimal"
+            Prefer:"return=representation"
           },
           body:JSON.stringify(payload)
         });
@@ -839,13 +919,14 @@
           throw new Error(await response.text());
         }
 
-       const savedLead = payload;
-       
+        const inserted = await response.json();
+        const savedLead = Array.isArray(inserted) && inserted[0] ? inserted[0] : payload;
 
         fetch(EMAIL_FUNCTION,{
           method:"POST",
           headers:{
             apikey:SUPABASE_KEY,
+            Authorization:`Bearer ${SUPABASE_KEY}`,
             "Content-Type":"application/json"
           },
           body:JSON.stringify(savedLead)
@@ -855,8 +936,11 @@
         if(window.clarity) clarity("event","Lead Submitted");
 
         form.reset();
-        formMessage.className = "message success";
-        formMessage.innerHTML = "<strong>Thank you.</strong> Your valuation request has been received. Werner or Liesl will contact you shortly.";
+        formMessage.className = "message";
+        formMessage.textContent = "";
+        formContent.style.display = "none";
+        successCard.classList.add("show");
+        document.getElementById("valuation-form").scrollIntoView({ behavior: "smooth", block: "center" });
       }catch(error){
         console.error(error);
         formMessage.className = "message error";
