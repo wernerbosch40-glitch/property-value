@@ -830,7 +830,7 @@
           headers:{
             apikey:SUPABASE_KEY,
             "Content-Type":"application/json",
-            Prefer:"return=representation"
+          Prefer:"return=minimal"
           },
           body:JSON.stringify(payload)
         });
@@ -839,7 +839,7 @@
           throw new Error(await response.text());
         }
 
-        const inserted = await response.json();
+       const savedLead = payload;
         const savedLead = Array.isArray(inserted) && inserted[0] ? inserted[0] : payload;
 
         fetch(EMAIL_FUNCTION,{
